@@ -2,7 +2,7 @@
 
 > Reproduction and extension of [DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter](https://arxiv.org/abs/1910.01108) (Sanh et al., 2019)
 >
-> TU Wien — Recommender Systems / ML course project, 2025
+> TU Wien — NLP course project, 2025
 
 ---
 
@@ -50,12 +50,30 @@ distilbert-reproduction/
 
 ---
 
+## Code Structure (`src/`)
+
+The `src/` folder contains shared helper code used by all notebooks. Instead of writing the same logic in every notebook, we put it here once and import it.
+
+### `train.py`
+The training loop used to fine-tune models. Every notebook calls this function with a model and dataset — it handles the full training process including the optimizer, learning rate scheduler, and validation after each epoch. This ensures BERT and DistilBERT are trained under identical conditions for a fair comparison.
+
+### `evaluate.py`
+Runs a trained model on the validation set and returns the accuracy. Used by all notebooks so that every model is evaluated in exactly the same way.
+
+### `utils.py`
+A collection of helper functions:
+- **`count_parameters`** — counts how many parameters a model has
+- **`model_size_mb`** — estimates the model's size in megabytes
+- **`measure_inference_speed`** — measures how many samples per second the model can process
+- **`save_results` / `load_results`** — saves and loads experiment results as JSON files so notebook 03 can load and compare all results automatically
+
+---
+
 ## Branch Strategy
 
 | Branch | Purpose |
 |--------|---------|
 | `main` | Stable, reviewed code only. No direct pushes. |
-| `setup` | Repo scaffolding, README, requirements |
 | `reproduction/bert-baseline` | BERT-base fine-tuning notebook |
 | `reproduction/distilbert` | DistilBERT fine-tuning notebook |
 | `reproduction/benchmarks` | Speed + size + accuracy measurements |
@@ -109,19 +127,13 @@ We fine-tune BERT-base on SST-2 (teacher), then train a 3-layer student model us
 
 **Comparison:**
 
-| Model | Accuracy | Parameters | Training Time |
-|-------|----------|------------|---------------|
-| BERT-base (teacher) | TBD | 110M | TBD |
-| DistilBERT (pre-train distilled) | TBD | 66M | TBD |
-| Task-distilled student (ours) | TBD | ~33M | TBD |
+| Model | Accuracy | Parameters | Distillation |
+|-------|----------|------------|--------------|
+| BERT-base (teacher) | TBD | 110M | None |
+| DistilBERT | TBD | 66M | Pre-training |
+| Our student (3-layer) | TBD | ~33M | Fine-tuning only |
 
 *Results to be filled in after running notebooks.*
-
----
-
-## Results Summary
-
-To be completed. All raw results are saved as JSON files in `results/`.
 
 ---
 
