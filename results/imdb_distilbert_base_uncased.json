@@ -1,0 +1,29 @@
+{
+  "model": "distilbert-base-uncased",
+  "task": "imdb",
+  "val_accuracy": 93.0,
+  "total_parameters": 66955010,
+  "model_size_mb": 255.41,
+  "inference_speed": {
+    "avg_time_per_batch_ms": 4.74,
+    "samples_per_second": 3378.43,
+    "n_batches_measured": 50
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.2999,
+      "val_accuracy": 92.32
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.1633,
+      "val_accuracy": 92.91
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.0928,
+      "val_accuracy": 93.0
+    }
+  ]
+}
