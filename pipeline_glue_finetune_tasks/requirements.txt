@@ -1,0 +1,16 @@
+transformers>=4.30.0
+datasets
+accelerate
+torch
+sentencepiece
+huggingface-hub
+evaluate
+scikit-learn
+scipy
+tqdm
+ipywidgets
+pypdf
+pandas
+numpy
+# Optional: jiant for advanced GLUE benchmarking
+# jiant>=1.3.0
