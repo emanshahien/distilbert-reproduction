@@ -1,0 +1,24 @@
+{
+  "model": "bert-base-uncased",
+  "task": "squad_v1",
+  "exact_match": 81.00283822138127,
+  "f1": 88.39393718310535,
+  "total_parameters": 108893186,
+  "model_size_mb": 415.39,
+  "inference_speed": {
+    "inference_time_seconds": 66.23,
+    "samples_per_second": 159.61,
+    "n_validation_examples": 10570,
+    "n_tokenized_features": 10784
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.4759
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.7515
+    }
+  ]
+}
