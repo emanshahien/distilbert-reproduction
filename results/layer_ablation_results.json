@@ -1,0 +1,23 @@
+[
+    {
+        "Layers":6,
+        "Accuracy (%)":93.21,
+        "Parameters (Millions)":66.96,
+        "Model Size (MB)":255.41,
+        "Inference Speed (Samples\/sec)":5040.17
+    },
+    {
+        "Layers":4,
+        "Accuracy (%)":91.99,
+        "Parameters (Millions)":52.78,
+        "Model Size (MB)":201.34,
+        "Inference Speed (Samples\/sec)":6734.7
+    },
+    {
+        "Layers":3,
+        "Accuracy (%)":91.01,
+        "Parameters (Millions)":45.69,
+        "Model Size (MB)":174.3,
+        "Inference Speed (Samples\/sec)":8227.86
+    }
+]

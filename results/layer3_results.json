@@ -1,0 +1,23 @@
+{
+  "model": "DistilBERT (3 layers)",
+  "accuracy": 91.01,
+  "parameters": 45691394,
+  "model_size_mb": 174.3,
+  "speed": {
+    "avg_time_per_batch_ms": 1.94,
+    "samples_per_second": 8227.86,
+    "n_batches_measured": 50
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.3624,
+      "val_accuracy": 89.43
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.2069,
+      "val_accuracy": 91.01
+    }
+  ]
+}

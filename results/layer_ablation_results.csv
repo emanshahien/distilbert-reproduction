@@ -1,0 +1,4 @@
+Layers,Accuracy (%),Parameters (Millions),Model Size (MB),Inference Speed (Samples/sec)
+6,93.21,66.96,255.41,5040.17
+4,91.99,52.78,201.34,6734.7
+3,91.01,45.69,174.3,8227.86
