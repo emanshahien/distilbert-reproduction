@@ -32,12 +32,22 @@ README.md                        # This file
 
 Compare the scores for each dataset with the reproduced scores. 
 
-| Model   | Score Avg. | CoLa | MNLI | MRPC | QNLI | QQP  | RTE  | SST-2 | STS-B | WNLI |
+| Model   | Score Avg. | CoLa | MNLI*) | MRPC | QNLI | QQP  | RTE  | SST-2 | STS-B*) | WNLI |
 |---------|------|------|------|------|------|------|------|-------|-------|------|
 |Bert-base (paper) | 79.5 | 56.3 | 86.7 | 88.6 | 91.8 | 89.6 | 69.3 | 92.7 | 89.0 | 53.5 | 
 |Bert-base (ours)| 79.4 | 57.6 | 84.6 | 86.5 | 91.4 | 91.0 | 66.8 | 92.3 |  89.0 | 55.0 | 
 |DistilBERT (paper) | 77.0 | 51.3 | 82.2 | 87.5 | 89.2 | 88.5 | 59.9 | 91.3 | 86.9 | 56.3 |
 |DistilBERT (ours)| 76.8 | 51.1 | 82.2 | 85.1 | 88.6 | 90.2 | 59.6 | 91.0  | 87.0 | 56.3 |  
+|DistilBERT (GLUE*)| 75.5 | 51.1 | 82.5 | 82.7 | 88.3 | 88.2 | 56.6 | 92.4 | 82.6 | 65.1 |  
+
+
+(GLUE*) GLUE Scores from submission, median over 5 submissions with the 5 trained models (difference was only the seed). 
+
+As it was not described clearly in the paper, how they made the GLUE submissions and how they aggregated their results, we just took all 5 with different seeds trained models and submitted them to GLUE to get the official test scores. The values here are a simple average.  
+
+*) Limitations:
+Due to our assumptions on MNLI and STS-B datasets the these numbers and also the overall average may not be comparable.
+
 
 
 ## Task Description                                
@@ -64,6 +74,9 @@ The exact configuration of the fine-tuning was not documented, so we used some d
 - Batch size: 16
 - Learning rate: 2e-5 (0.00002)
 
+STS-B: GLUE reports a Pearson and Spearman correlation. In the paper, only one number shows up. It's not clearly defined, how this is calculated. We assumed that only Pearson Correlation was used. 
+
+MNLI: GLUE reports two results for this dataset: for "matched" and "unmatched". It was not clearly defined in the paper which one was used, or how to aggregate this. We only validated during training with the "matched" validations split. 
 
 
 ## How to run
@@ -154,7 +167,7 @@ Datasets are cached after first download in `~/.cache/huggingface/datasets/`
 
 Results are saved to `outputs/glue_benchmark/`:
 
-This GitHub repository only contains the JSON files. 
+This GitHub repository only contains the summary JSON files. There is just not enough space to save all trained models (9 x 5) in this repository. 
 
 ```
 outputs/glue_benchmark/
@@ -174,7 +187,7 @@ outputs/glue_benchmark/
 
 ## Future Work
 
-**Distillation**: Instead of using pretrained models, this approach could also be applied. However, it was not done in this project due to the required computational resources.
+**Distillation**: Instead of using pretrained models, this approach could also be applied. However, it was not done in this project due to the required computational resources and time.
 
 ## References
 

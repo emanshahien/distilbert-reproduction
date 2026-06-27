@@ -1,0 +1,33 @@
+{
+  "model_path": null,
+  "tokenizer_path": "distilbert-base-uncased",
+  "base_model_name": "distilbert-base-uncased",
+  "tasks_to_submit": [
+    "sst2",
+    "cola",
+    "mrpc",
+    "qqp",
+    "stsb",
+    "mnli",
+    "qnli",
+    "rte",
+    "wnli"
+  ],
+  "task_model_paths": {
+    "sst2": "../notebooks/outputs/glue_benchmark/distilbert-base-uncased/sst2/seed_42",
+    "cola": "../notebooks/outputs/glue_benchmark/distilbert-base-uncased/cola/seed_42",
+    "mrpc": "../notebooks/outputs/glue_benchmark/distilbert-base-uncased/mrpc/seed_42",
+    "qqp": "../notebooks/outputs/glue_benchmark/distilbert-base-uncased/qqp/seed_42",
+    "stsb": "../notebooks/outputs/glue_benchmark/distilbert-base-uncased/stsb/seed_42",
+    "mnli": "../notebooks/outputs/glue_benchmark/distilbert-base-uncased/mnli/seed_42",
+    "qnli": "../notebooks/outputs/glue_benchmark/distilbert-base-uncased/qnli/seed_42",
+    "rte": "../notebooks/outputs/glue_benchmark/distilbert-base-uncased/rte/seed_42",
+    "wnli": "../notebooks/outputs/glue_benchmark/distilbert-base-uncased/wnli/seed_42"
+  },
+  "task_tokenizer_paths": {},
+  "task_base_model_names": {},
+  "max_length": 512,
+  "batch_size": 64,
+  "submission_name": "distilbert_full_glue_submission",
+  "output_dir": "./outputs"
+}
