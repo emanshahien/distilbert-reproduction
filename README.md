@@ -2,7 +2,7 @@
 
 > Reproduction and extension of [DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter](https://arxiv.org/abs/1910.01108) (Sanh et al., 2019)
 >
-> TU Wien — NLP course project, 2025
+> TU Wien · 192.039 Deep Learning for NLP (VU 4,0) 2026S
 
 ---
 
