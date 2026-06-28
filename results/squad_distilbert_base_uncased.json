@@ -1,0 +1,24 @@
+{
+  "model": "distilbert-base-uncased",
+  "task": "squad_v1",
+  "exact_match": 77.14285714285714,
+  "f1": 85.3008733453402,
+  "total_parameters": 66364418,
+  "model_size_mb": 253.16,
+  "inference_speed": {
+    "inference_time_seconds": 33.56,
+    "samples_per_second": 314.93,
+    "n_validation_examples": 10570,
+    "n_tokenized_features": 10784
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.7065
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.9071
+    }
+  ]
+}
