@@ -16,9 +16,10 @@ DistilBERT is a compressed version of BERT-base that retains 97% of its language
 
 | Name | Task |
 |------|------|
-| Christine | SST-2 + GLUE (Table 1) |
-| Eman | IMDb sentiment + Layer Ablation Extension |
-| Djem & Sneha | SQuAD v1.1 QA |
+| Eman | Repo setup + IMDb sentiment |
+| Christine | SST-2 + full GLUE benchmark |
+| Djem | SQuAD v1.1 QA |
+| Sneha | Extension — Layer Ablation Study |
 
 ---
 
@@ -29,26 +30,39 @@ distilbert-reproduction/
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
-├── data/
-│   └── download_sst2.py           # script to download/cache datasets
+│
+├── pipeline_glue_finetune_tasks/      # Christine — GLUE benchmark
+│   ├── notebooks/
+│   │   ├── 01-setup.ipynb
+│   │   ├── 03-finetune-glue.ipynb
+│   │   └── 04-evaluate.ipynb
+│   ├── distilbert_repro/
+│   │   ├── utils.py
+│   │   └── glue_benchmark.py
+│   ├── datasets/
+│   ├── glue_official_submission/
+│   ├── requirements.txt
+│   └── README.md
+│
 ├── notebooks/
-│   ├── pipeline_sst2_glue.ipynb   # Christine — SST-2 & GLUE tasks
-│   ├── pipeline_imdb.ipynb        # Eman — IMDb sentiment
-│   ├── pipeline_squad.ipynb       # Djem & Sneha — SQuAD v1.1
-│   ├── comparison.ipynb           # Final comparison table & plots (run last)
-│   └── extension.ipynb            # Extension — Layer Ablation Study on DistilBERT
+│   ├── pipeline_imdb.ipynb            # Eman — IMDb sentiment
+│   ├── pipeline_squad.ipynb           # Djem — SQuAD v1.1
+│   ├── comparison.ipynb               # Final comparison table & plots
+│   └── extension.ipynb                # Sneha — Layer Ablation Study
+│
 ├── src/
-│   ├── train.py                   # Shared training loop
-│   ├── evaluate.py                # Evaluation utilities
-│   └── utils.py                   # Helpers (model size, speed, saving results)
-└── results/                       # All experiment outputs saved here as JSON
+│   ├── train.py                       # Shared training loop
+│   ├── evaluate.py                    # Evaluation utilities
+│   └── utils.py                       # Helpers (model size, speed, saving results)
+│
+└── results/                           # All experiment outputs saved here as JSON
 ```
 
 ---
 
 ## Code Structure (`src/`)
 
-The `src/` folder contains shared helper code used by all notebooks. Instead of writing the same logic in every notebook, we put it here once and import it — this also ensures every model is trained and evaluated under identical conditions.
+The `src/` folder contains shared helper code used by the IMDb, SQuAD, and extension notebooks.
 
 ### `train.py`
 The training loop used to fine-tune models. Handles the optimizer, learning rate scheduler, and validation after each epoch.
@@ -62,6 +76,8 @@ A collection of helper functions:
 - **`model_size_mb`** — estimates the model's size in megabytes
 - **`measure_inference_speed`** — measures how many samples per second the model processes
 - **`save_results` / `load_results`** — saves and loads experiment results as JSON files
+
+> Christine's GLUE pipeline uses its own utilities in `pipeline_glue_finetune_tasks/distilbert_repro/`. See the README inside that folder for details.
 
 ---
 
@@ -84,6 +100,8 @@ Work on `develop`, open a Pull Request to merge into `main` when done.
 pip install -r requirements.txt
 ```
 
+For the GLUE pipeline, see `pipeline_glue_finetune_tasks/README.md` for its own setup instructions.
+
 ### On Google Colab / JupyterHub
 
 Each notebook is self-contained and runs top-to-bottom on a GPU environment.
@@ -95,14 +113,12 @@ Each notebook is self-contained and runs top-to-bottom on a GPU environment.
 ### Order of execution
 
 ```
-pipeline_sst2_glue.ipynb  ──┐
-pipeline_imdb.ipynb        ──┼──► results/  ──► comparison.ipynb
-pipeline_squad.ipynb       ──┘
-
+pipeline_glue_finetune_tasks/  ──────────────────────────────────► results/
+pipeline_imdb.ipynb            ──┐
+pipeline_squad.ipynb           ──┼──► results/  ──► comparison.ipynb
+                                 ┘
 extension.ipynb  ──► results/  (layer ablation results saved separately)
 ```
-
-Run the three pipeline notebooks first (in any order), then run `comparison.ipynb` to generate the final tables and plots. The extension notebook is independent and can be run separately.
 
 ---
 
@@ -110,16 +126,34 @@ Run the three pipeline notebooks first (in any order), then run `comparison.ipyn
 
 We reproduce fine-tuning results using released pre-trained weights from HuggingFace. Full pre-training is not reproduced due to compute constraints.
 
-### Accuracy
+### GLUE Benchmark (Christine)
 
-| Model | IMDb | SQuAD F1 |
-|-------|------|----------|
-| BERT-base (paper) | 93.46% | 88.5 |
-| DistilBERT (paper) | 92.82% | 85.8 |
-| BERT-base (ours) | **94.16%** | TBD |
-| DistilBERT (ours) | **93.00%** | TBD |
+| Model | Score Avg. | CoLa | MNLI | MRPC | QNLI | QQP | RTE | SST-2 | STS-B | WNLI |
+|-------|------------|------|------|------|------|-----|-----|-------|-------|------|
+| BERT-base (paper) | 79.5 | 56.3 | 86.7 | 88.6 | 91.8 | 89.6 | 69.3 | 92.7 | 89.0 | 53.5 |
+| BERT-base (ours) | **79.4** | 57.6 | 84.6 | 86.5 | 91.4 | 91.0 | 66.8 | 92.3 | 89.0 | 55.0 |
+| DistilBERT (paper) | 77.0 | 51.3 | 82.2 | 87.5 | 89.2 | 88.5 | 59.9 | 91.3 | 86.9 | 56.3 |
+| DistilBERT (ours) | **76.8** | 51.1 | 82.2 | 85.1 | 88.6 | 90.2 | 59.6 | 91.0 | 87.0 | 56.3 |
+
+> Results are the median of 5 runs with different seeds. See `pipeline_glue_finetune_tasks/README.md` for full methodology and limitations.
+
+### IMDb Sentiment (Eman)
+
+| Model | IMDb Accuracy |
+|-------|---------------|
+| BERT-base (paper) | 93.46% |
+| DistilBERT (paper) | 92.82% |
+| BERT-base (ours) | **94.16%** |
+| DistilBERT (ours) | **93.00%** |
 
 > DistilBERT retains **98.8%** of BERT accuracy on IMDb in our experiments.
+
+### SQuAD v1.1 (Djem)
+
+| Model | Paper EM / F1 | Ours EM / F1 |
+|-------|---------------|--------------|
+| BERT-base | 81.2 / 88.5 | **81.00 / 88.39** |
+| DistilBERT | 77.7 / 85.8 | **77.14 / 85.30** |
 
 ### Model Size & Speed
 
@@ -130,19 +164,19 @@ We reproduce fine-tuning results using released pre-trained weights from Hugging
 
 ---
 
-## Extension: Layer Ablation Study
+## Extension: Layer Ablation Study (Sneha)
 
-The original DistilBERT uses 6 transformer layers. We investigate whether further compression is possible by reducing to 4 or 3 layers, and measure the accuracy/speed/size trade-off on IMDb.
+The original DistilBERT uses 6 transformer layers. We investigate whether further compression is possible by reducing to 4 or 3 layers, measuring the accuracy/speed/size trade-off on IMDb.
 
 ### Results
 
-| Layers | Accuracy | Parameters | Size | Speed |
-|--------|----------|------------|------|-------|
+| Layers | Accuracy | Parameters | Size | Inference Speed |
+|--------|----------|------------|------|-----------------|
 | 6 (DistilBERT) | 93.21% | 66.96M | 255MB | 5040 samples/s |
 | 4 | 91.99% | 52.78M | 201MB | 6734 samples/s |
 | 3 | 91.01% | 45.69M | 174MB | 8228 samples/s |
 
-**Key finding:** Reducing from 6 to 4 layers saves ~21% parameters and runs ~34% faster, while losing only ~1.2% accuracy. The 3-layer model achieves ~63% more speed than the original but drops ~2.2% in accuracy.
+**Key finding:** Reducing from 6 to 4 layers saves ~21% parameters and runs ~34% faster, with only ~1.2% accuracy loss. The 3-layer model achieves ~63% more speed than the original but drops ~2.2% in accuracy.
 
 See `notebooks/extension.ipynb` for full implementation and plots.
 
