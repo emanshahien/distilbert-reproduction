@@ -17,7 +17,7 @@ DistilBERT is a compressed version of BERT-base that retains 97% of its language
 | Name | Task |
 |------|------|
 | Christine | SST-2 + GLUE (Table 1) |
-| Eman | IMDb sentiment |
+| Eman | IMDb sentiment + Layer Ablation Extension |
 | Djem & Sneha | SQuAD v1.1 QA |
 
 ---
@@ -36,7 +36,7 @@ distilbert-reproduction/
 │   ├── pipeline_imdb.ipynb        # Eman — IMDb sentiment
 │   ├── pipeline_squad.ipynb       # Djem & Sneha — SQuAD v1.1
 │   ├── comparison.ipynb           # Final comparison table & plots (run last)
-│   └── extension.ipynb            # Extension — TBD
+│   └── extension.ipynb            # Extension — Layer Ablation Study on DistilBERT
 ├── src/
 │   ├── train.py                   # Shared training loop
 │   ├── evaluate.py                # Evaluation utilities
@@ -84,12 +84,12 @@ Work on `develop`, open a Pull Request to merge into `main` when done.
 pip install -r requirements.txt
 ```
 
-### On Google Colab
+### On Google Colab / JupyterHub
 
-Each notebook is self-contained and runs top-to-bottom on a free Colab T4 GPU.
+Each notebook is self-contained and runs top-to-bottom on a GPU environment.
 
-1. Open the notebook in Colab
-2. Enable GPU: **Runtime → Change runtime type → T4 GPU**
+1. Open the notebook
+2. Enable GPU if on Colab: **Runtime → Change runtime type → T4 GPU**
 3. Click **Runtime → Run all**
 
 ### Order of execution
@@ -98,9 +98,11 @@ Each notebook is self-contained and runs top-to-bottom on a free Colab T4 GPU.
 pipeline_sst2_glue.ipynb  ──┐
 pipeline_imdb.ipynb        ──┼──► results/  ──► comparison.ipynb
 pipeline_squad.ipynb       ──┘
+
+extension.ipynb  ──► results/  (layer ablation results saved separately)
 ```
 
-Run the three pipeline notebooks first (in any order), then run `comparison.ipynb` to generate the final tables and plots.
+Run the three pipeline notebooks first (in any order), then run `comparison.ipynb` to generate the final tables and plots. The extension notebook is independent and can be run separately.
 
 ---
 
@@ -108,29 +110,41 @@ Run the three pipeline notebooks first (in any order), then run `comparison.ipyn
 
 We reproduce fine-tuning results using released pre-trained weights from HuggingFace. Full pre-training is not reproduced due to compute constraints.
 
-### Accuracy (paper reference)
+### Accuracy
 
-| Model | SST-2 | IMDb | SQuAD F1 |
-|-------|-------|------|----------|
-| BERT-base (paper) | 93.5% | 95.63% | 88.5 |
-| DistilBERT (paper) | 91.3% | 95.79% | 85.8 |
-| BERT-base (ours) | TBD | TBD | TBD |
-| DistilBERT (ours) | TBD | TBD | TBD |
+| Model | IMDb | SQuAD F1 |
+|-------|------|----------|
+| BERT-base (paper) | 93.46% | 88.5 |
+| DistilBERT (paper) | 92.82% | 85.8 |
+| BERT-base (ours) | **94.16%** | TBD |
+| DistilBERT (ours) | **93.00%** | TBD |
 
-### Model Size & Speed (paper reference)
+> DistilBERT retains **98.8%** of BERT accuracy on IMDb in our experiments.
+
+### Model Size & Speed
 
 | Model | Parameters | Size | Speed |
 |-------|------------|------|-------|
-| BERT-base | 110M | ~440MB | 1x |
-| DistilBERT | 66M | ~265MB | 1.6x faster |
-
-*Results to be filled in after running notebooks.*
+| BERT-base | 110M | ~418MB | 1x |
+| DistilBERT | 66M | ~255MB | ~2x faster |
 
 ---
 
-## Extension
+## Extension: Layer Ablation Study
 
-To be decided by the group after reproduction is complete. See `notebooks/extension.ipynb`.
+The original DistilBERT uses 6 transformer layers. We investigate whether further compression is possible by reducing to 4 or 3 layers, and measure the accuracy/speed/size trade-off on IMDb.
+
+### Results
+
+| Layers | Accuracy | Parameters | Size | Speed |
+|--------|----------|------------|------|-------|
+| 6 (DistilBERT) | 93.21% | 66.96M | 255MB | 5040 samples/s |
+| 4 | 91.99% | 52.78M | 201MB | 6734 samples/s |
+| 3 | 91.01% | 45.69M | 174MB | 8228 samples/s |
+
+**Key finding:** Reducing from 6 to 4 layers saves ~21% parameters and runs ~34% faster, while losing only ~1.2% accuracy. The 3-layer model achieves ~63% more speed than the original but drops ~2.2% in accuracy.
+
+See `notebooks/extension.ipynb` for full implementation and plots.
 
 ---
 
