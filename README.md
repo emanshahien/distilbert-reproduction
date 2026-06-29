@@ -128,14 +128,18 @@ We reproduce fine-tuning results using released pre-trained weights from Hugging
 
 ### GLUE Benchmark (Christine)
 
-| Model | Score Avg. | CoLa | MNLI | MRPC | QNLI | QQP | RTE | SST-2 | STS-B | WNLI |
-|-------|------------|------|------|------|------|-----|-----|-------|-------|------|
-| BERT-base (paper) | 79.5 | 56.3 | 86.7 | 88.6 | 91.8 | 89.6 | 69.3 | 92.7 | 89.0 | 53.5 |
-| BERT-base (ours) | **79.4** | 57.6 | 84.6 | 86.5 | 91.4 | 91.0 | 66.8 | 92.3 | 89.0 | 55.0 |
-| DistilBERT (paper) | 77.0 | 51.3 | 82.2 | 87.5 | 89.2 | 88.5 | 59.9 | 91.3 | 86.9 | 56.3 |
-| DistilBERT (ours) | **76.8** | 51.1 | 82.2 | 85.1 | 88.6 | 90.2 | 59.6 | 91.0 | 87.0 | 56.3 |
+| Model | Score Avg. | CoLa | MNLI*) | MRPC | QNLI | QQP | RTE | SST-2 | STS-B*) | WNLI |
+|-------|------------|------|--------|------|------|-----|-----|-------|---------|------|
+|BERT-base (paper) | 79.5 | 56.3 | 86.7 | 88.6 | 91.8 | 89.6 | 69.3 | 92.7 | 89.0 | 53.5 | 
+|BERT-base (ours)| 79.4 | 57.6 | 84.6 | 86.5 | 91.4 | 91.0 | 66.8 | 92.3 |  89.0 | 55.0 | 
+|DistilBERT (paper) | 77.0 | 51.3 | 82.2 | 87.5 | 89.2 | 88.5 | 59.9 | 91.3 | 86.9 | 56.3 |
+|DistilBERT (ours)| 76.8 | 51.1 | 82.2 | 85.1 | 88.6 | 90.2 | 59.6 | 91.0  | 87.0 | 56.3 |  
+|DistilBERT (GLUE*)| 75.5 | 51.1 | 82.5 | 82.7 | 88.3 | 88.2 | 56.6 | 92.4 | 82.6 | 65.1 |  
 
-> Results are the median of 5 runs with different seeds. See `pipeline_glue_finetune_tasks/README.md` for full methodology and limitations.
+(GLUE*) GLUE Scores from submission, median over 5 submissions with the 5 trained models (different seeds). 
+
+> Results are the median of 5 runs with different seeds. See `pipeline_glue_finetune_tasks/README.md` for full methodology and limitations (Due to our assumptions on MNLI and STS-B datasets the these numbers and also the overall average may not be comparable).
+
 
 ### IMDb Sentiment (Eman)
 
