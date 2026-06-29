@@ -8,24 +8,34 @@ Christine Hubinger
 ## Key Points
 
 - **Multiple seeds**: Median of 5 runs with different seeds
-- **All GLUE tasks**: SST-2 was used for prototying, finally all tasks were implemented 
+- **All GLUE tasks**: SST-2 was used for prototying, finally all tasks implemented 
 - **Models**: DistilBERT, BERT-base
 - **Results**: metrics saved as JSON Files
 
 ## Structure
 
 ```
+datasets/                             # GLUE Benchmark specific data
+  AX.tsv                              # Diagnostic dataset from GLUE
+
 notebooks/
-  01-setup.ipynb                 # Environment setup and dependency checks
-  03-finetune-glue.ipynb         # GLUE fine-tuning with multiple seeds
-  04-evaluate.ipynb              # Results aggregation and analysis
+  01-setup.ipynb                      # Environment setup and dependency checks
+  03-finetune-glue.ipynb              # GLUE fine-tuning with multiple seeds
+  04-evaluate.ipynb                   # Results aggregation and analysis
 
 distilbert_repro/
-  utils.py                       # Common utilities (seed setting, paths)
-  glue_benchmark.py              # GLUE-specific classes and utilities
+  utils.py                            # Common utilities (seed setting, paths)
+  glue_benchmark.py                   # GLUE-specific classes and utilities
 
-requirements.txt                 # Python dependencies
-README.md                        # This file
+pipeline_glue_finetune_tasks/         # Pipeline for official GLUE Submission 
+  configs/
+    submission_config.json            # configuration file
+  outputs/                            # Folder for submission-ready files
+  01-generate-glue-submission.ipynb   # use official GLUE test-set on trained models
+  README.md                           # additional information for submission task
+
+requirements.txt                      # Python dependencies
+README.md                             # This file
 ```
 
 ## Final Results 
